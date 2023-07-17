@@ -77,6 +77,14 @@ func (n *Network) Load(data JSON) {
     }
 }
 
+func (nw *Network) GetV4Addr() (string, error) {
+    return "", nil
+}
+
+func (nw *Network) GetV6Addr() (string, error) {
+    return "", nil
+}
+
 func MigrateNetwork(db *gorm.DB) *gorm.DB {
     db.AutoMigrate(&Network{})
     return db

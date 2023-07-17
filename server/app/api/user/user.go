@@ -15,11 +15,13 @@ import (
 )
 
 type (
+    JSON = map[string]interface{}
     Session = sm.Session
     User = model.User
     Topology = model.Topology
     Network = model.Network
     VirtualMachine = model.VirtualMachine
+    VmResp = model.VmResp
 )
 
 var (
@@ -146,7 +148,7 @@ func getUserNetworks(c *gin.Context) {
 func getUserVms(c *gin.Context) {
     var err error
     var user *User
-    var vms []VirtualMachine
+    var vms []VmResp
 
     id, _ := strconv.Atoi(c.Param("id"))
     if user, err = model.GetUserByID(uint(id)); err != nil {
@@ -165,6 +167,6 @@ func getUserVms(c *gin.Context) {
 
     c.JSON(http.StatusCreated, gin.H{
         "message": "success",
-        "data":    vms,
+        "data": vms,
     })
 }

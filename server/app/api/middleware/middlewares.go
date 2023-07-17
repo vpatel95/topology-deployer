@@ -14,6 +14,7 @@ import (
 	sm "github.com/vpatel95/session-manager"
 	"github.com/vpatel95/topology-deployer/app/lib/common"
 	"github.com/vpatel95/topology-deployer/app/model"
+	"github.com/vpatel95/topology-deployer/database"
 	"github.com/vpatel95/topology-deployer/env"
 	"github.com/vpatel95/topology-deployer/globals"
 )
@@ -22,6 +23,9 @@ type (
     Session = sm.Session
     JSON = map[string]interface{}
     User = model.User
+    Topology = model.Topology
+    Network = model.Network
+    VirtualMachine = model.VirtualMachine
 )
 
 var (
@@ -148,6 +152,105 @@ func IsSelfUser() gin.HandlerFunc {
 
         id, _ := strconv.Atoi(c.Param("id"))
         currUserID = sess.Get("user_id").(int)
+        if currUserID != id {
+            c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+                "message": "Unauthorized",
+            })
+            return
+        }
+        c.Next()
+    }
+}
+
+func IsUserTopology() gin.HandlerFunc {
+    return func(c *gin.Context) {
+        var currUserID int
+        var sess *Session
+        if sess = common.GetSession(c); sess == nil {
+            c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+                "message" : "Unauthorized",
+            })
+            return
+        }
+
+        id, _ := strconv.Atoi(c.Param("id"))
+        currUserID = sess.Get("user_id").(int)
+
+        db := database.DB
+        err := db.First(&Topology{}, "id = ? AND user_id = ?", id, currUserID).Error
+        if err != nil {
+            c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+                "message": "Unauthorized",
+            })
+            return
+        }
+
+        if currUserID != id {
+            c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+                "message": "Unauthorized",
+            })
+            return
+        }
+        c.Next()
+    }
+}
+
+func IsUserVm() gin.HandlerFunc {
+    return func(c *gin.Context) {
+        var currUserID int
+        var sess *Session
+        if sess = common.GetSession(c); sess == nil {
+            c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+                "message" : "Unauthorized",
+            })
+            return
+        }
+
+        id, _ := strconv.Atoi(c.Param("id"))
+        currUserID = sess.Get("user_id").(int)
+
+        db := database.DB
+        err := db.First(&VirtualMachine{}, "id = ? AND user_id = ?", id, currUserID).Error
+        if err != nil {
+            c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+                "message": "Unauthorized",
+            })
+            return
+        }
+
+        if currUserID != id {
+            c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+                "message": "Unauthorized",
+            })
+            return
+        }
+        c.Next()
+    }
+}
+
+func IsUserNw() gin.HandlerFunc {
+    return func(c *gin.Context) {
+        var currUserID int
+        var sess *Session
+        if sess = common.GetSession(c); sess == nil {
+            c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+                "message" : "Unauthorized",
+            })
+            return
+        }
+
+        id, _ := strconv.Atoi(c.Param("id"))
+        currUserID = sess.Get("user_id").(int)
+
+        db := database.DB
+        err := db.First(&Network{}, "id = ? AND user_id = ?", id, currUserID).Error
+        if err != nil {
+            c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+                "message": "Unauthorized",
+            })
+            return
+        }
+
         if currUserID != id {
             c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
                 "message": "Unauthorized",

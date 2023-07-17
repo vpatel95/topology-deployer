@@ -1,12 +1,12 @@
 package model
 
 import (
-	"errors"
-	"net"
+    "errors"
+    "net"
 
-	"gorm.io/gorm"
+    "gorm.io/gorm"
 
-	"github.com/vpatel95/topology-deployer/database"
+    "github.com/vpatel95/topology-deployer/database"
 )
 
 
@@ -35,11 +35,12 @@ var (
 type (
     VmFlavor string
 
-    VmNetRB struct {
+    VmNet struct {
         ID          int `json:"id"`
         IPv4Address string `json:"ipv4_address"`
         IPv6Address string `json:"ipv6_address"`
     }
+
     VmRB struct {
         Name        string `json:"name"`
         Flavor      VmFlavor `json:"flavor"`
@@ -49,7 +50,19 @@ type (
         Vcpu        int `json:"vcpu"`
         TopologyID  int `json:"topology_id"`
         UserID      int `json:"user_id"`
-        Networks    []VmNetRB `json:"networks"`
+        Networks    []VmNet `json:"networks"`
+    }
+
+    VmResp struct {
+        Name        string `json:"name"`
+        Flavor      VmFlavor `json:"flavor"`
+        VNCPort     int `json:"vnc_port"`
+        Disk        string `json:"disk"`
+        Ram         int `json:"ram"`
+        Vcpu        int `json:"vcpu"`
+        TopologyID  int `json:"topology_id"`
+        UserID      int `json:"user_id"`
+        Networks    []VmNet `json:"vm_net"`
     }
 
     VirtualMachine struct {
@@ -91,6 +104,100 @@ func (vm *VirtualMachine) Load(data JSON) {
     vm.VNCPort = data["vnc_port"].(int)
     vm.TopologyID = data["topology_id"].(int)
     vm.UserID = data["user_id"].(int)
+}
+
+func (vm *VirtualMachine) GetAllNetworks() ([]Network, error) {
+    var err error
+    var objs []Network
+
+    db := database.DB
+
+    if err = db.Model(vm).Association("Networks").Find(&objs); err != nil {
+        return nil, err
+    }
+
+    return objs, nil
+}
+
+func (vm *VirtualMachine) GetNatNetworks() ([]Network, error) {
+    var err error
+    var objs []Network
+
+    db := database.DB
+
+    if err = db.Model(vm).
+                Where("type = ?", "nat").Association("Networks").
+                Find(&objs); err != nil {
+        return nil, err
+    }
+
+    return objs, nil
+}
+
+func (vm *VirtualMachine) GetIsolatedNetwork() ([]Network, error) {
+    var err error
+    var objs []Network
+
+    db := database.DB
+
+    if err = db.Model(vm).
+                Where("type = ?", "isolated").Association("Networks").
+                Find(&objs); err != nil {
+        return nil, err
+    }
+
+    return objs, nil
+}
+
+func (vm *VirtualMachine) GetMgmtNetwork() ([]Network, error) {
+    var err error
+    var objs []Network
+
+    db := database.DB
+
+    if err = db.Model(vm).
+                Where("type = ?", "management").Association("Networks").
+                Find(&objs); err != nil {
+        return nil, err
+    }
+
+    return objs, nil
+}
+
+func (vm *VirtualMachine) GetMgmtIp() (string, error) {
+    var err error
+    var vmn VirtualMachineNetwork
+
+    db := database.DB
+
+    mgmt_nws, err := vm.GetMgmtNetwork()
+    err = db.First(&vmn, "network_id=? AND virtual_machine_id=?", mgmt_nws[0].ID, vm.ID).Error
+    if err != nil {
+        return "", err
+    }
+
+    return vmn.IPv4Address, nil
+}
+
+func (vm *VirtualMachine) GetAddrByNID(nid int, v4 bool) (string, error) {
+    var err error
+    var ip string
+    var vmn VirtualMachineNetwork
+
+    db := database.DB
+
+    err = db.First(&vmn, "network_id=? AND virtual_machine_id=?", nid, vm.ID).Error
+    if err != nil {
+        return "", err
+    }
+
+    if (v4) {
+        ip = vmn.IPv4Address
+    } else {
+        ip = vmn.IPv6Address
+    }
+
+    return ip, nil
 }
 
 func MigrateVirtualMachine(db *gorm.DB) *gorm.DB {

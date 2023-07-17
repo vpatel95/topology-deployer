@@ -27,20 +27,23 @@ func (t *Topology) Load(data JSON) {
     t.UserID = int(data["user_id"].(float64))
 }
 
-func (t *Topology) GetVms() ([]VirtualMachine, error) {
+func (t *Topology) GetVms() ([]VmResp, error) {
     var err error
-    var objs []VirtualMachine
+    var vms []VirtualMachine
+    var vmsResp []VmResp
 
     db := database.DB
 
     if err = db.Model(t).
                 Preload("Networks").
                 Association("VirtualMachines").
-                Find(&objs); err != nil {
+                Find(&vms); err != nil {
         return nil, err
     }
 
-    return objs, nil
+    vmsResp = createVmResp(vms)
+
+    return vmsResp, nil
 }
 
 func (t *Topology) GetNetworks() ([]Network, error) {

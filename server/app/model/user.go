@@ -3,8 +3,8 @@ package model
 import (
 	"errors"
 
-	"github.com/vpatel95/topology-deployer/database"
 	"gorm.io/gorm"
+	"github.com/vpatel95/topology-deployer/database"
 )
 
 
@@ -64,20 +64,23 @@ func (u *User) GetNetworks() ([]Network, error) {
     return objs, nil
 }
 
-func (u *User) GetVirtualMachines() ([]VirtualMachine, error) {
+func (u *User) GetVirtualMachines() ([]VmResp, error) {
     var err error
-    var objs []VirtualMachine
+    var vms []VirtualMachine
+    var vmsResp []VmResp
 
     db := database.DB
 
     if err = db.Model(u).
                 Preload("Networks").
                 Association("VirtualMachines").
-                Find(&objs); err != nil {
+                Find(&vms); err != nil {
         return nil, err
     }
 
-    return objs, nil
+    vmsResp = createVmResp(vms)
+
+    return vmsResp, nil
 }
 
 func (u *User) Serialize() JSON {

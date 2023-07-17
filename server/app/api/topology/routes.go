@@ -10,8 +10,10 @@ func Routes(router *gin.RouterGroup) {
     routes.Use(middleware.ValidateSessionID(),
                middleware.Authorization())
 
-    routes.GET("/:id", get)
     routes.POST("/create", create)
-    routes.PUT("/:id", update)
-    routes.DELETE("/:id", delete)
+    routes.Use(middleware.IsUserTopology()).GET("/:id", get)
+    routes.Use(middleware.IsUserTopology()).PUT("/:id", update)
+    routes.Use(middleware.IsUserTopology()).DELETE("/:id", delete)
+    routes.Use(middleware.IsUserTopology()).GET("/:id/vms", getVms)
+    routes.Use(middleware.IsUserTopology()).GET("/:id/networks", getNw)
 }

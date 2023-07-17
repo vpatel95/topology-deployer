@@ -30,3 +30,28 @@ func validateVm(vmReq VmRB) error {
     return nil
 }
 
+func createVmResp(vms []VirtualMachine) []VmResp {
+    var vmsResp []VmResp
+
+    for _, vm := range vms {
+        var vmResp VmResp
+        vmResp.Name = vm.Name
+        vmResp.Flavor = vm.Flavor
+        vmResp.VNCPort = vm.VNCPort
+        vmResp.Disk = vm.Disk
+        vmResp.Ram = vm.Ram
+        vmResp.Vcpu = vm.Vcpu
+        vmResp.TopologyID = vm.TopologyID
+        vmResp.UserID = vm.UserID
+        for _, net := range vm.Networks {
+            var vmNet VmNet
+            vmNet.ID = int(net.ID)
+            vmNet.IPv4Address, _ = vm.GetAddrByNID(vmNet.ID, true)
+            vmNet.IPv6Address, _ = vm.GetAddrByNID(vmNet.ID, false)
+            vmResp.Networks = append(vmResp.Networks, vmNet)
+        }
+        vmsResp = append(vmsResp, vmResp)
+    }
+
+    return vmsResp
+}
