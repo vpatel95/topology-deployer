@@ -264,9 +264,11 @@ func IsUserNw() gin.HandlerFunc {
 func CORSMiddleware() gin.HandlerFunc {
     log.Println("In enable CORS Middleware")
     return func(c *gin.Context) {
-        c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+        c.Writer.Header().Set("Access-Control-Allow-Origin", "http://10.87.1.25:3000")
+        c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
         c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-        c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Origin, Accept")
+        // c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Origin, Accept")
+        c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
 
         if (c.Request.Method == http.MethodOptions) {
             c.AbortWithStatus(http.StatusOK)

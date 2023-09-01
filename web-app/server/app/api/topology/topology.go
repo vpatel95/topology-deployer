@@ -26,7 +26,7 @@ var (
 )
 
 func get(c *gin.Context) {
-    log.Println("In Topology GetAll")
+    log.Println("In Topology By Id")
     var err error
     var topology *Topology
 

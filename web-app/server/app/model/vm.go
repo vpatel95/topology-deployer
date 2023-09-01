@@ -200,6 +200,22 @@ func (vm *VirtualMachine) GetAddrByNID(nid int, v4 bool) (string, error) {
     return ip, nil
 }
 
+func GetVirtualMachineById(vid int) (*VmResp, error) {
+    var vm VirtualMachine
+    var err error
+
+    db := database.DB
+    if err = db.Model(vm).Limit(1).
+                Preload("Networks").
+                Association("VirtualMachines").
+                Find(&vm, vid); err != nil {
+        return nil, nil
+    }
+
+    vmRes := createVmResp([]VirtualMachine{vm})
+    return &vmRes[0], nil
+}
+
 func MigrateVirtualMachine(db *gorm.DB) *gorm.DB {
     if err := db.SetupJoinTable(&VirtualMachine{}, "Networks", &VirtualMachineNetwork{}); err != nil {
         panic(err)

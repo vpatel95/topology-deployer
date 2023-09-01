@@ -89,5 +89,6 @@ func login(c *gin.Context) {
 
     c.JSON(http.StatusCreated, gin.H{
         "message": "success",
+        "user": user.Serialize(),
     })
 }
