@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -66,7 +65,6 @@ func ValidateSessionID() gin.HandlerFunc {
     log.Println("In validateToken Middleware")
     return func(c *gin.Context) {
         sid, err := sessionManager.GetSessionId(c.Request)
-        log.Println("get sid : " + sid)
         if err != nil {
             log.Println("[ValidateSessionID] ::: Failed to get token : " + err.Error())
             c.AbortWithStatusJSON(http.StatusUnauthorized, JSON{
@@ -131,10 +129,7 @@ func Authorization() gin.HandlerFunc {
             return
         }
 
-
         c.Set("session", sess)
-        fmt.Printf("Authorization ::: User ok : %v\n", sess.Get("user_id"))
-
         c.Next()
     }
 }

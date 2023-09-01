@@ -2,7 +2,7 @@ import Axios from './api';
 
 const USER_API_PREFIX = '/user';
 
-class UserService {
+class UserServiceType {
     topologies(user_id: number) {
         return Axios.get(`${USER_API_PREFIX}/${user_id}/topologies`)
             .then(response => {
@@ -25,4 +25,5 @@ class UserService {
     }
 }
 
-export default new UserService();
+const UserService = new UserServiceType();
+export default UserService;

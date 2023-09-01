@@ -2,9 +2,14 @@ import {
     useState,
     useEffect,
 } from 'react';
-import { Outlet, Link } from 'react-router-dom';
-import AuthService from './../services/auth';
-import UserService from './../services/user';
+import { Outlet, Navigate } from 'react-router-dom';
+import AuthService from 'services/auth';
+import UserService from 'services/user';
+
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Container from 'react-bootstrap/Container';
+import {Sidebar, NavigationBar, NavbarLink} from 'components/Navbar';
 
 export default function UserPage() {
     const [user, setUser] = useState(AuthService.getCurrentUser());
@@ -17,17 +22,18 @@ export default function UserPage() {
     }, []);
 
     useEffect(() => {
+        if (!user) {
+            return;
+        }
+
         UserService.topologies(user.id).then(
             res => {
                 setTopologies(res.data);
             },
             error => {
                 const errMsg =
-                    (error.response &&
-                     error.response.data &&
-                     error.response.data.message) ||
-                     error.message ||
-                     error.toString();
+                    (error.response && error.response.data && error.response.data.message) ||
+                     error.message || error.toString();
 
                 console.log(errMsg);
             }
@@ -39,11 +45,8 @@ export default function UserPage() {
             },
             error => {
                 const errMsg =
-                    (error.response &&
-                     error.response.data &&
-                     error.response.data.message) ||
-                     error.message ||
-                     error.toString();
+                    (error.response && error.response.data && error.response.data.message) ||
+                     error.message || error.toString();
 
                 console.log(errMsg);
             }
@@ -55,54 +58,52 @@ export default function UserPage() {
             },
             error => {
                 const errMsg =
-                    (error.response &&
-                     error.response.data &&
-                     error.response.data.message) ||
-                     error.message ||
-                     error.toString();
+                    (error.response && error.response.data && error.response.data.message) ||
+                     error.message || error.toString();
 
                 console.log(errMsg);
             }
         );
     }, [user]);
 
-    return (
-        <>
-        <div id="sidebar">
-            <h1>{user.name}</h1>
-            <div>
-                <form id="search-form" role="search">
-                    <input id="q" aria-label="Search contacts" placeholder="Search" type="search" name="q" />
-                    <div id="search-spinner" aria-hidden hidden={true} />
-                    <div className="sr-only" aria-live="polite" ></div>
-                </form>
-                <form method="post">
-                    <button type="submit">New</button>
-                </form>
-            </div>
-            <nav>
-                <ul>
-                    <li key="topologies">
-                        <Link to={`/user/${user.id}/topologies`} state={topologies}>
-                            Topologies
-                        </Link>
-                    </li>
-                    <li key="networks">
-                        <Link to={`/user/${user.id}/networks`} state={networks}>
-                            Networks
-                        </Link>
-                    </li>
-                    <li key="vms">
-                        <Link to={`/user/${user.id}/vms`} state={vms}>
-                            Virtual Machines
-                        </Link>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-        <div id="detail">
-            <Outlet/>
-        </div>
-        </>
-    );
+    if (!user) {
+        return (<Navigate to="/login" replace={true} />);
+    } else {
+        return (
+            <>
+            <Container fluid className="p-0 flex-column">
+                <Row className="p-0">
+                    <NavigationBar>
+                        <NavbarLink route={`/user/${user.id}/topologies`}
+                            name="Topologies" state={topologies} />
+                        <NavbarLink route={`/user/${user.id}/networks`}
+                            name="Networks" state={networks} />
+                        <NavbarLink route={`/user/${user.id}/vms`}
+                            name="Virtual Machines" state={vms} />
+                        <NavbarLink route="/logout" name="Logout" />
+                    </NavigationBar>
+                </Row>
+                <Row className="p-0 flex-row">
+                    <Col xs={2} className="ps-5 pt-5">
+                        <Sidebar>
+                            <NavbarLink route={`/user/${user.id}/topologies`}
+                                name="Topologies" state={topologies} />
+                            <NavbarLink route={`/user/${user.id}/networks`}
+                                name="Networks" state={networks} />
+                            <NavbarLink route={`/user/${user.id}/vms`}
+                                name="Virtual Machines" state={vms} />
+                        </Sidebar>
+                    </Col>
+                    <Col xs={10} className="ps-0">
+                        <Container fluid className="p-4">
+                            <Outlet/>
+                        </Container>
+                    </Col>
+                    <Col className="ps-0"></Col>
+                </Row>
+            </Container>
+            </>
+        );
+    }
+
 }

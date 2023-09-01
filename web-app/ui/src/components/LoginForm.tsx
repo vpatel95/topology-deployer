@@ -1,5 +1,9 @@
 import { useState } from 'react';
 
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
+
 export interface LoginProps {
     onSubmit: (data: LoginData) => void;
 }
@@ -23,22 +27,19 @@ const LoginForm = ({onSubmit }: LoginProps) => {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div className="form-floating mb-3 col-sm-4">
-                <input type="text" name="username" className="form-control"
-                    id="username" placeholder="Username" value={loginData.username} onChange={handleInputChange} />
-                <label htmlFor="username">Username</label>
-            </div>
-            <div className="form-floating col-sm-4">
-                <input type="password" name="password" className="form-control"
-                    id="password" placeholder="Password" value={loginData.password} onChange={handleInputChange}/>
-                <label htmlFor="password">Password</label>
-            </div>
-            <br/>
-            <div className="form-floating">
-                <button type="submit">Login</button>
-            </div>
-        </form>
+        <Form onSubmit={handleSubmit}>
+            <FloatingLabel controlId="username" label="Username" className="mb-3 col-sm-4">
+                <Form.Control name="username" type="text" placeholder="username"
+                    value={loginData.username} onChange={handleInputChange}/>
+            </FloatingLabel>
+            <FloatingLabel controlId="password" label="Password" className="mb-3 col-sm-4">
+                <Form.Control name="password" type="password" placeholder="password"
+                    value={loginData.password} onChange={handleInputChange}/>
+            </FloatingLabel>
+            <Button variant="primary" type="submit">
+                Submit
+            </Button>
+        </Form>
     )
 }
 

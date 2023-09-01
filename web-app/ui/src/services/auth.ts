@@ -2,7 +2,7 @@ import Axios from './api';
 
 const AUTH_API_PREFIX = '/auth';
 
-class AuthService {
+class AuthServiceType {
     login(username: string, password: string) {
         return Axios.post(`${AUTH_API_PREFIX}/login`, {username, password})
             .then(res => {
@@ -28,4 +28,5 @@ class AuthService {
     }
 }
 
-export default new AuthService();
+const AuthService = new AuthServiceType();
+export default AuthService;

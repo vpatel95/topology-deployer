@@ -1,21 +1,34 @@
-import React from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import React, {
+    useState,
+    useEffect,
+} from 'react';
+import { Outlet, Navigate } from 'react-router-dom';
+
+import Container from 'react-bootstrap/Container';
+import {NavigationBar, NavbarLink} from 'components/Navbar';
+
+import AuthService from 'services/auth';
 
 export default function LandingPage() {
-    return (
-        <>
-        <div id="sidebar">
-            <h1>Landing</h1>
-            <nav>
-                <ul>
-                    <li><Link to={`/login`}>Login</Link></li>
-                    <li><Link to={`/login`}>Login</Link></li>
-                </ul>
-            </nav>
-        </div>
-        <div id="detail">
-            <Outlet/>
-        </div>
-        </>
-    );
+    const [user, setUser] = useState(AuthService.getCurrentUser());
+
+    useEffect(() => {
+        setUser(AuthService.getCurrentUser());
+    }, []);
+
+    if (user) {
+        return (<Navigate to="/user" />);
+    } else {
+        return (
+            <>
+            <NavigationBar>
+                <NavbarLink route="/login" name="Login" />
+                <NavbarLink route="/register" name="Register" />
+            </NavigationBar>
+            <Container className="p-4">
+                <Outlet/>
+            </Container>
+            </>
+        );
+    }
 }
