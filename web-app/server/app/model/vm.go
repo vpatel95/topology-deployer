@@ -54,6 +54,7 @@ type (
     }
 
     VmResp struct {
+        ID          uint `json:"ID"`
         Name        string `json:"name"`
         Flavor      VmFlavor `json:"flavor"`
         VNCPort     int `json:"vnc_port"`

@@ -31,11 +31,14 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
+import {useUser} from "contexts/UserContext";
 
 const Profile = () => {
+  const { user } = useUser();
+
   return (
     <>
-      <UserHeader />
+      <UserHeader user={user.info} />
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
@@ -48,7 +51,7 @@ const Profile = () => {
                       <img
                         alt="..."
                         className="rounded-circle"
-                        src={require("../../assets/img/theme/team-4-800x800.jpg")}
+                        src={require("assets/img/theme/team-4-800x800.jpg")}
                       />
                     </a>
                   </div>

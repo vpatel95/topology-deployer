@@ -35,6 +35,7 @@ func createVmResp(vms []VirtualMachine) []VmResp {
 
     for _, vm := range vms {
         var vmResp VmResp
+        vmResp.ID = vm.ID
         vmResp.Name = vm.Name
         vmResp.Flavor = vm.Flavor
         vmResp.VNCPort = vm.VNCPort

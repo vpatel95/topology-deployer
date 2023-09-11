@@ -17,6 +17,7 @@
 */
 
 // reactstrap components
+import {Link} from "react-router-dom";
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 
 export const HeaderCard = ({userObject}) => {
@@ -27,7 +28,7 @@ export const HeaderCard = ({userObject}) => {
           <Row>
             <div className="col">
               <CardTitle tag="h5" className="text-uppercase text-muted mb-0" >
-                {userObject.name}
+                <Link to={"/user/" + userObject.link} >{userObject.name}</Link>
               </CardTitle>
               <span className="h2 font-weight-bold mb-0">
                 {userObject.size}

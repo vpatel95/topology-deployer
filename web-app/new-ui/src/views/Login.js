@@ -64,7 +64,7 @@ const Login = () => {
 
     AuthService.login(username, password).then(
       () => {
-        setRedirect("/admin/index");
+        setRedirect("/user/dashboard");
       },
       error => {
         const errMsg =
@@ -110,7 +110,7 @@ const Login = () => {
                   <img
                     alt="..."
                     src={
-                      require("../../assets/img/icons/common/github.svg")
+                      require("assets/img/icons/common/github.svg")
                         .default
                     }
                   />
@@ -128,7 +128,7 @@ const Login = () => {
                   <img
                     alt="..."
                     src={
-                      require("../../assets/img/icons/common/google.svg")
+                      require("assets/img/icons/common/google.svg")
                         .default
                     }
                   />

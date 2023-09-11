@@ -52,7 +52,7 @@ const Register = () => {
                   <img
                     alt="..."
                     src={
-                      require("../../assets/img/icons/common/github.svg")
+                      require("assets/img/icons/common/github.svg")
                         .default
                     }
                   />
@@ -69,7 +69,7 @@ const Register = () => {
                   <img
                     alt="..."
                     src={
-                      require("../../assets/img/icons/common/google.svg")
+                      require("assets/img/icons/common/google.svg")
                         .default
                     }
                   />

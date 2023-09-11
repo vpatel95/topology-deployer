@@ -15,49 +15,50 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import Index from "views/Index.js";
-import Profile from "views/examples/Profile.js";
-import Maps from "views/examples/Maps.js";
-import Register from "views/examples/Register.js";
-import Login from "views/examples/Login.js";
-import Tables from "views/examples/Tables.js";
-import Icons from "views/examples/Icons.js";
+import Index from "views/Index";
+import Profile from "views/Profile";
+import Networks from "views/Networks";
+import Register from "views/Register";
+import Login from "views/Login";
+import VirtualMachines from "views/VirtualMachines";
+import Topologies from "views/Topologies";
+
 
 var routes = [
   {
-    path: "/index",
+    path: "/dashboard",
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
     component: <Index />,
-    layout: "/admin",
+    layout: "/user",
   },
   {
-    path: "/icons",
-    name: "Icons",
+    path: "/topologies",
+    name: "Topologies",
     icon: "ni ni-planet text-blue",
-    component: <Icons />,
-    layout: "/admin",
+    component: <Topologies />,
+    layout: "/user",
   },
   {
-    path: "/maps",
-    name: "Maps",
+    path: "/networks",
+    name: "Networks",
     icon: "ni ni-pin-3 text-orange",
-    component: <Maps />,
-    layout: "/admin",
+    component: <Networks />,
+    layout: "/user",
   },
   {
-    path: "/user-profile",
+    path: "/virtual-machines",
+    name: "Virtual Machines",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: <VirtualMachines />,
+    layout: "/user",
+  },
+  {
+    path: "/profile",
     name: "User Profile",
     icon: "ni ni-single-02 text-yellow",
     component: <Profile />,
-    layout: "/admin",
-  },
-  {
-    path: "/tables",
-    name: "Tables",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: <Tables />,
-    layout: "/admin",
+    layout: "/user",
   },
   {
     path: "/login",

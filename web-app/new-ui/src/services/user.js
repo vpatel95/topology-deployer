@@ -27,13 +27,16 @@ class UserServiceType {
     async getUserObjects(user_id) {
       let userObjects = {
         topologies: {
-          name: "Topologies"
+          name: "Topologies",
+          link: "topologies"
         },
         networks: {
-          name: "Networks"
+          name: "Networks",
+          link: "networks"
         },
         vms: {
-          name: "Virtual Machines"
+          name: "Virtual Machines",
+          link: "virtual-machines"
         }
       };
 

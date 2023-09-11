@@ -23,8 +23,6 @@ const UserActions = {
 
 // Reducer
 const reducer = (user, action) => {
-  console.log("Inside reducer : ", action);
-  console.trace();
   switch (action.type) {
     case UserActions.SET_INFO:
       return { ...user, info: action.payload };
