@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"log"
 
-    "gorm.io/gorm"
 	"github.com/vpatel95/topology-deployer/env"
+	"gorm.io/gorm"
 )
 
 var (

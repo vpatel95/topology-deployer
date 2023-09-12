@@ -6,14 +6,14 @@ import (
 )
 
 func Routes(router *gin.RouterGroup) {
-    routes := router.Group("/topology")
-    routes.Use(middleware.ValidateSessionID(),
-               middleware.Authorization())
+	routes := router.Group("/topology")
+	routes.Use(middleware.ValidateSessionID(),
+		middleware.Authorization())
 
-    routes.POST("/create", create)
-    routes.Use(middleware.IsUserTopology()).GET("/:id", get)
-    routes.Use(middleware.IsUserTopology()).PUT("/:id", update)
-    routes.Use(middleware.IsUserTopology()).DELETE("/:id", delete)
-    routes.Use(middleware.IsUserTopology()).GET("/:id/vms", getVms)
-    routes.Use(middleware.IsUserTopology()).GET("/:id/networks", getNw)
+	routes.POST("/create", create)
+	routes.Use(middleware.IsUserTopology()).GET("/:id", get)
+	routes.Use(middleware.IsUserTopology()).PUT("/:id", update)
+	routes.Use(middleware.IsUserTopology()).DELETE("/:id", delete)
+	routes.Use(middleware.IsUserTopology()).GET("/:id/vms", getVms)
+	routes.Use(middleware.IsUserTopology()).GET("/:id/networks", getNw)
 }

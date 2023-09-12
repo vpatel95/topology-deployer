@@ -1,18 +1,18 @@
 package route
 
 import (
-    "github.com/gin-gonic/gin"
-    "github.com/vpatel95/topology-deployer/app/api"
-    "github.com/vpatel95/topology-deployer/app/api/middleware"
+	"github.com/gin-gonic/gin"
+	"github.com/vpatel95/topology-deployer/app/api"
+	"github.com/vpatel95/topology-deployer/app/api/middleware"
 )
 
 var (
-    Router *gin.Engine
+	Router *gin.Engine
 )
 
 func InitRouter() {
-    Router = gin.Default()
-    Router.Use(middleware.CORSMiddleware())
+	Router = gin.Default()
+	Router.Use(middleware.CORSMiddleware())
 
-    api.GetRoutes(Router)
+	api.GetRoutes(Router)
 }

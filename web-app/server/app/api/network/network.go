@@ -14,63 +14,63 @@ import (
 )
 
 type (
-    Session = sm.Session
-    Network = model.Network
-    NetworkType = model.NetworkType
+	Session     = sm.Session
+	Network     = model.Network
+	NetworkType = model.NetworkType
 )
 
 var (
-    sessionManager = globals.SessionManager
+	sessionManager = globals.SessionManager
 )
 
 func index(c *gin.Context) {
-    log.Println("In Network Get")
-    common.RespondNotImplemented(c)
+	log.Println("In Network Get")
+	common.RespondNotImplemented(c)
 }
 
 func get(c *gin.Context) {
-    log.Println("In Network GetAll")
-    common.RespondNotImplemented(c)
+	log.Println("In Network GetAll")
+	common.RespondNotImplemented(c)
 }
 
 func create(c *gin.Context) {
-    var nw Network
-    var err error
-    var sess *Session
+	var nw Network
+	var err error
+	var sess *Session
 
-    if err = c.ShouldBindJSON(&nw); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "message" : errors.New("Invalid request parameters"),
-        })
-        return
-    }
+	if err = c.ShouldBindJSON(&nw); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": errors.New("Invalid request parameters"),
+		})
+		return
+	}
 
-    if sess = common.GetSession(c); sess == nil {
-        c.JSON(http.StatusUnauthorized, gin.H{
-            "message" : "Unauthorized",
-        })
-        return
-    }
+	if sess = common.GetSession(c); sess == nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": "Unauthorized",
+		})
+		return
+	}
 
-    nw.UserID = sess.Get("user_id").(int)
+	nw.UserID = sess.Get("user_id").(int)
 
-    if err = model.CreateNetwork(nw); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "message" : err.Error(),
-        })
-        return
-    }
+	if err = model.CreateNetwork(nw); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
 
-    c.JSON(http.StatusCreated, gin.H{
-        "message": "success",
-        "data":    nw.Serialize(),
-    })
+	c.JSON(http.StatusCreated, gin.H{
+		"message": "success",
+		"data":    nw.Serialize(),
+	})
 }
 
 func update(c *gin.Context) {
-    common.RespondNotImplemented(c)
+	common.RespondNotImplemented(c)
 }
 
 func delete(c *gin.Context) {
-    common.RespondNotImplemented(c)
+	common.RespondNotImplemented(c)
 }

@@ -8,23 +8,22 @@ import (
 )
 
 var (
-    ErrTopologyExists    = errors.New("Topology name already exists")
+	ErrTopologyExists = errors.New("Topology name already exists")
 )
 
 func validateTopology(t Topology, isCreate bool) error {
-    var exists Topology
-    db := database.DB
+	var exists Topology
+	db := database.DB
 
-    if (valid.IsNull(t.Name)) {
-        return errors.New("Invalid request parameters")
-    }
+	if valid.IsNull(t.Name) {
+		return errors.New("Invalid request parameters")
+	}
 
-    if (isCreate) {
-        if err := db.Where("name = ?", t.Name).First(&exists).Error; err == nil {
-            return ErrTopologyExists
-        }
-    }
+	if isCreate {
+		if err := db.Where("name = ?", t.Name).First(&exists).Error; err == nil {
+			return ErrTopologyExists
+		}
+	}
 
-    return nil
+	return nil
 }
-
