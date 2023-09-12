@@ -19,14 +19,14 @@ const TopologyNetworkDetail = ({tname, networks}) => {
       <div className="col">
         <Card className="shadow">
           <CardHeader className="border-0">
-            <h2>{ tname } Networks</h2>
+            <h3>{ tname } Networks</h3>
           </CardHeader>
           <CardBody>
             <Row>
             { networks &&
               networks.map((network) => (
                 <Col xs={12} sm={6} lg={4} key={tname + "-net" + network.ID} >
-                  <Card className="shadow">
+                  <Card className="shadow mb-3" outline color="dark">
                     <CardHeader className="border-0">
                       <h3 className="mb-0">{network.name}</h3>
                     </CardHeader>

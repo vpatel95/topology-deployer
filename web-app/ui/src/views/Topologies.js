@@ -17,9 +17,14 @@
 */
 import React from "react";
 import {
+  Button,
   Card,
   CardHeader,
   Container,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   Row,
   Table,
 } from "reactstrap";
@@ -27,8 +32,33 @@ import Header from "components/Headers/Header.js";
 import {TopologyDetailRow} from "components/Tables/TopologyTable";
 import { useUser } from "contexts/UserContext";
 
+export const CreateTopologyModal = ({isOpen, toggle}) => {
+  return (
+    <div>
+      <Modal isOpen={isOpen} toggle={toggle} size="md">
+        <ModalHeader toggle={toggle}>Create Topology</ModalHeader>
+        <ModalBody>
+          Add Topology add form here
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={toggle}>
+            Create
+          </Button>{' '}
+          <Button color="secondary" onClick={toggle}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </div>
+  );
+};
+
 const Topologies = () => {
   const { user } = useUser();
+
+  const [modal, setModal] = React.useState(false);
+  const toggle = () => setModal(!modal);
+
   return (
     <>
       <Header userObjects={user.objects} />
@@ -39,7 +69,15 @@ const Topologies = () => {
           <div className="col">
             <Card className="shadow">
               <CardHeader className="border-0">
-                <h3 className="mb-0">Topologies</h3>
+                <Row className="align-items-center">
+                  <div className="col">
+                    <h2 className="mb-0">Topologies</h2>
+                  </div>
+                  <div className="col text-right">
+                    <Button color="primary" size="md" onClick={toggle}>Create</Button>
+                  </div>
+                  <CreateTopologyModal isOpen={modal} toggle={toggle}/>
+                </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
