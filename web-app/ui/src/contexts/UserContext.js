@@ -5,6 +5,7 @@ import UserService from 'services/user';
 // Initial state
 const initUser = {
   info: AuthService.getCurrentUser(),
+  new_data: true,
   objects: {
     topologies: {},
     networks: {},
@@ -15,10 +16,11 @@ const initUser = {
 // Action Type
 const UserActions = {
   SET_INFO: 0,
-  SET_OBJS: 1,
-  SET_TOPOLOGIES: 2,
-  SET_NETWORKS: 3,
-  SET_VMS: 4,
+  SET_NEWDATA: 1,
+  SET_OBJS: 2,
+  SET_TOPOLOGIES: 3,
+  SET_NETWORKS: 4,
+  SET_VMS: 5,
 };
 
 // Reducer
@@ -28,6 +30,8 @@ const reducer = (user, action) => {
       return { ...user, info: action.payload };
     case UserActions.SET_OBJS:
       return { ...user, objects: action.payload };
+    case UserActions.SET_NEWDATA:
+      return {...user, new_data:action.payload};
     default:
       return user;
   }
@@ -44,19 +48,25 @@ const UserProvider = ({ children }) => {
       return;
     }
 
+    if (!user.new_data) {
+      console.log("No new data");
+      return;
+    }
+
     UserService.getUserObjects(user.info.id).then(
       res => {
         userDispatch({type: UserActions.SET_OBJS, payload: res});
+        userDispatch({type: UserActions.SET_NEWDATA, payload: false});
       },
       error => {
         const errMsg =
           (error.response && error.response.data && error.response.data.message) ||
           error.message || error.toString();
 
-        console.log("Fetch user Objects failed : ", errMsg);
+        console.error("Fetch user Objects failed : ", errMsg);
       }
     );
-  }, [user.info]);
+  }, [user.info, user.new_data]);
 
   return (
     <UserContext.Provider value={{ user, userDispatch }}>

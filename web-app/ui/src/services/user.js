@@ -1,4 +1,4 @@
-import Axios from './api';
+import Axios from "./api";
 
 const USER_API_PREFIX = '/user';
 

@@ -17,15 +17,81 @@
 */
 import React from "react";
 import {
+  Button,
   Card,
   CardHeader,
   Container,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
   Row,
   Table,
 } from "reactstrap";
 import Header from "components/Headers/Header.js";
 import { useUser } from "contexts/UserContext";
 
+export const CreateNetworkModal = ({isOpen, toggle}) => {
+  const { userDispatch } = useUser();
+  const [formData, setFormData] = React.useState({
+    name: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const createTopology = () => {
+    // TopologyService.create(formData).then(
+    //   res => {
+    //     console.log("Topology create success : ", res);
+    //     userDispatch({type: UserActions.SET_NEWDATA, payload: true});
+    //   },
+    //   err => {
+    //     console.error("Topology create error : ", err);
+    //   }
+    // );
+    toggle();
+  };
+
+  return (
+    <div>
+      <Modal isOpen={isOpen} toggle={toggle} size="md">
+        <ModalHeader toggle={toggle}>Create Topology</ModalHeader>
+        <ModalBody>
+          <Form>
+            <FormGroup>
+              <Label for="topologyName">
+                  Topology Name
+              </Label>
+              <Input
+                id="topologyName"
+                name="name"
+                placeholder="Name"
+                type="text"
+                value={formData.name}
+                onChange={handleChange}
+              />
+            </FormGroup>
+          </Form>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={createTopology}>
+            Create
+          </Button>{' '}
+          <Button color="secondary" onClick={toggle}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </div>
+  );
+};
 const Networks = () => {
   const { user } = useUser();
   return (

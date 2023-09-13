@@ -45,7 +45,6 @@ func get(c *gin.Context) {
 }
 
 func create(c *gin.Context) {
-	log.Println("In Topology Create")
 	var topology Topology
 	var err error
 	var sess *Session
@@ -67,6 +66,7 @@ func create(c *gin.Context) {
 	topology.UserID = sess.Get("user_id").(int)
 
 	if err = model.CreateTopology(topology); err != nil {
+		log.Printf("Error creating topology : %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": err.Error(),
 		})
@@ -85,8 +85,37 @@ func update(c *gin.Context) {
 }
 
 func delete(c *gin.Context) {
-	log.Println("In Topology Delete")
-	common.RespondNotImplemented(c)
+	var topology *Topology
+	topologyID, _ := strconv.Atoi(c.Param("id"))
+	var sess *Session
+	var err error
+
+	log.Println("Before get session")
+	if sess = common.GetSession(c); sess == nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": "Unauthorized",
+		})
+		return
+	}
+
+	log.Println("After get session")
+	if topology, err = model.GetTopologyByID(uint(topologyID)); err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	if err := model.DeleteTopology(topology); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": err.Error(),
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "success",
+		"data":    topology.Serialize(),
+	})
 }
 
 func getVms(c *gin.Context) {

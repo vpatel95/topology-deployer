@@ -20,8 +20,7 @@ import { useLocation, Route, Routes, Navigate } from "react-router-dom";
 import UserNavbar from "components/Navbars/UserNavbar";
 import Sidebar from "components/Sidebar/Sidebar";
 
-import routes from "routes.js";
-import { UserProvider } from "contexts/UserContext";
+import routes, { objectRoutes } from "routes.js";
 
 const UserLayout = (props) => {
   const mainContent = React.useRef(null);
@@ -35,6 +34,18 @@ const UserLayout = (props) => {
 
 
   const getRoutes = (routes) => {
+    return routes.map((prop, key) => {
+      if (prop.layout === "/user") {
+        return (
+          <Route path={prop.path} element={prop.component} key={key} exact />
+        );
+      } else {
+        return null;
+      }
+    });
+  };
+
+  const getObjectRoutes = (routes) => {
     return routes.map((prop, key) => {
       if (prop.layout === "/user") {
         return (
@@ -67,16 +78,15 @@ const UserLayout = (props) => {
         }}
       />
       <div className="main-content" ref={mainContent}>
-        <UserProvider>
           <UserNavbar
             {...props}
             brandText={getBrandText(location?.pathname)}
           />
           <Routes>
             {getRoutes(routes)}
-            <Route path="*" element={<Navigate to="/user/dashboard" replace />} />
+            {getObjectRoutes(objectRoutes)}
+            <Route path="*" element={<Navigate to={"/user/dashboard"} replace />} />
           </Routes>
-        </UserProvider>
       </div>
     </>
   );

@@ -160,6 +160,7 @@ func IsUserTopology() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var currUserID int
 		var sess *Session
+		var topology Topology
 		if sess = common.GetSession(c); sess == nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"message": "Unauthorized",
@@ -171,15 +172,15 @@ func IsUserTopology() gin.HandlerFunc {
 		currUserID = sess.Get("user_id").(int)
 
 		db := database.DB
-		err := db.First(&Topology{}, "id = ? AND user_id = ?", id, currUserID).Error
+		err := db.First(&topology, id).Error
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-				"message": "Unauthorized",
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+				"message": "Topology not found",
 			})
 			return
 		}
 
-		if currUserID != id {
+		if currUserID != topology.UserID {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"message": "Unauthorized",
 			})

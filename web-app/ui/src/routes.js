@@ -21,10 +21,24 @@ import Networks from "views/Networks";
 import Register from "views/Register";
 import Login from "views/Login";
 import VirtualMachines from "views/VirtualMachines";
-import Topologies from "views/Topologies";
+import Topologies, {Topology} from "views/Topologies";
 
 
 var routes = [
+  {
+    path: "/login",
+    name: "Login",
+    icon: "ni ni-key-25 text-info",
+    component: <Login />,
+    layout: "/auth",
+  },
+  {
+    path: "/register",
+    name: "Register",
+    icon: "ni ni-circle-08 text-pink",
+    component: <Register />,
+    layout: "/auth",
+  },
   {
     path: "/dashboard",
     name: "Dashboard",
@@ -60,19 +74,23 @@ var routes = [
     component: <Profile />,
     layout: "/user",
   },
+];
+
+export var objectRoutes = [
   {
-    path: "/login",
-    name: "Login",
-    icon: "ni ni-key-25 text-info",
-    component: <Login />,
-    layout: "/auth",
+    path: "/topology/:tid",
+    component: <Topology/>,
+    layout: "/user",
   },
   {
-    path: "/register",
-    name: "Register",
-    icon: "ni ni-circle-08 text-pink",
-    component: <Register />,
-    layout: "/auth",
+    path: "/network/:nid",
+    component: <Networks />,
+    layout: "/user",
+  },
+  {
+    path: "/virtual-machine/:vid",
+    component: <VirtualMachines />,
+    layout: "/user",
   },
 ];
 export default routes;

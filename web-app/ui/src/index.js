@@ -25,13 +25,14 @@ import "assets/scss/argon-dashboard-react.scss";
 
 import UserLayout from "layouts/User";
 import AuthLayout from "layouts/Auth";
+import { UserProvider } from "contexts/UserContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route path="/user/*" element={ <UserLayout /> } />
+      <Route path="/user/*" element={ <UserProvider><UserLayout /></UserProvider> } />
       <Route path="/auth/*" element={<AuthLayout />} />
       <Route path="*" element={<Navigate to="/auth/login" replace />} />
     </Routes>

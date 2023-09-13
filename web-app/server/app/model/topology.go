@@ -74,6 +74,12 @@ func CreateTopology(t Topology) error {
 	return db.Create(&t).Error
 }
 
+func DeleteTopology(t *Topology) error {
+	db := database.DB
+
+	return db.Delete(t).Error
+}
+
 func GetTopologyByID(id uint) (*Topology, error) {
 	var err error
 	var topology Topology
