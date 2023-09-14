@@ -70,7 +70,10 @@ export const CreateTopologyModal = ({isOpen, toggle}) => {
         <ModalHeader toggle={toggle}>Create Topology</ModalHeader>
         <ModalBody>
           <Form>
-            <FormGroup floating="true">
+            <FormGroup>
+              <Label htmlFor="topologyName">
+                  Topology Name
+              </Label>
               <Input
                 id="topologyName"
                 name="name"
@@ -79,9 +82,6 @@ export const CreateTopologyModal = ({isOpen, toggle}) => {
                 value={formData.name}
                 onChange={handleChange}
               />
-              <Label htmlFor="topologyName">
-                  Topology Name
-              </Label>
             </FormGroup>
           </Form>
         </ModalBody>

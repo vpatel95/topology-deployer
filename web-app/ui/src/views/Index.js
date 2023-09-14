@@ -16,30 +16,18 @@
 
 */
 import React from "react";
-import Chart from "chart.js";
 import { Container, Row, Col, } from "reactstrap";
+import {Navigate} from "react-router-dom";
 
+import {useUser } from "contexts/UserContext";
+import Header from "components/Headers/Header.js";
 import { TopologyTable } from "components/Tables/TopologyTable";
 import { NetworkTable } from "components/Tables/NetworkTable";
 
-// core components
-import {
-  chartOptions,
-  parseOptions,
-} from "variables/charts.js";
-
-import Header from "components/Headers/Header.js";
-
-import {Navigate} from "react-router-dom";
-import {useUser } from "contexts/UserContext";
 import {VirtualMachineTable} from "components/Tables/VirtualMachineTable";
 
 const Index = (props) => {
   const { user } = useUser();
-
-  if (window.Chart) {
-    parseOptions(Chart, chartOptions());
-  }
 
   if (!user.info) {
     console.log(user);

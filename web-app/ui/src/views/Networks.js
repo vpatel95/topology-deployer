@@ -33,7 +33,8 @@ import {
   Table,
 } from "reactstrap";
 import Header from "components/Headers/Header.js";
-import { useUser } from "contexts/UserContext";
+import { useUser, UserActions } from "contexts/UserContext";
+import NetworkService from "services/network";
 
 export const CreateNetworkModal = ({isOpen, toggle}) => {
   const { userDispatch } = useUser();
@@ -46,31 +47,33 @@ export const CreateNetworkModal = ({isOpen, toggle}) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const createTopology = () => {
-    // TopologyService.create(formData).then(
-    //   res => {
-    //     console.log("Topology create success : ", res);
-    //     userDispatch({type: UserActions.SET_NEWDATA, payload: true});
-    //   },
-    //   err => {
-    //     console.error("Topology create error : ", err);
-    //   }
-    // );
+  const createNetwork = () => {
+    NetworkService.create(formData).then(
+      res => {
+        console.log("Network create success : ", res);
+        userDispatch({type: UserActions.SET_NEWDATA, payload: true});
+      },
+      err => {
+        console.error("Topology create error : ", err);
+      }
+    );
     toggle();
   };
 
   return (
     <div>
       <Modal isOpen={isOpen} toggle={toggle} size="md">
-        <ModalHeader toggle={toggle}>Create Topology</ModalHeader>
+        <ModalHeader toggle={toggle}>
+          <h2>Create Network</h2>
+        </ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>
-              <Label for="topologyName">
-                  Topology Name
+              <Label for="networkName">
+                  Network Name
               </Label>
               <Input
-                id="topologyName"
+                id="networkName"
                 name="name"
                 placeholder="Name"
                 type="text"
@@ -81,7 +84,7 @@ export const CreateNetworkModal = ({isOpen, toggle}) => {
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={createTopology}>
+          <Button color="primary" onClick={createNetwork}>
             Create
           </Button>{' '}
           <Button color="secondary" onClick={toggle}>
@@ -92,6 +95,7 @@ export const CreateNetworkModal = ({isOpen, toggle}) => {
     </div>
   );
 };
+
 const Networks = () => {
   const { user } = useUser();
   return (

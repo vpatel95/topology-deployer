@@ -30,7 +30,6 @@ import {
   DropdownToggle,
   Form,
   Input,
-  InputGroupAddon,
   InputGroupText,
   InputGroup,
   Media,
@@ -210,11 +209,9 @@ const Sidebar = (props) => {
                 placeholder="Search"
                 type="search"
               />
-              <InputGroupAddon addonType="prepend">
-                <InputGroupText>
-                  <span className="fa fa-search" />
-                </InputGroupText>
-              </InputGroupAddon>
+              <InputGroupText>
+                <span className="fa fa-search" />
+              </InputGroupText>
             </InputGroup>
           </Form>
           {/* Navigation */}

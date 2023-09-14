@@ -13,6 +13,7 @@ import { getMemory, getFlavor, getNetworkType } from "utils";
 import {Link} from "react-router-dom";
 import TopologyService from "services/topology";
 import {UserActions, useUser} from "contexts/UserContext";
+import { CreateNetworkModal } from "views/Networks";
 
 export const TopologyNetworkDetail = ({tname, networks}) => {
   const [modal, setModal] = React.useState(false);
@@ -31,6 +32,7 @@ export const TopologyNetworkDetail = ({tname, networks}) => {
               <div className="col text-right">
                 <Button color="primary" size="md" onClick={toggle}>Create</Button>
               </div>
+              <CreateNetworkModal isOpen={modal} toggle={toggle} />
             </Row>
           </CardHeader>
           <CardBody>
