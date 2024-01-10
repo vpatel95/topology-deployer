@@ -1,28 +1,16 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.2.3
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 import { useLocation, Outlet } from "react-router-dom";
+
 import UserNavbar from "components/Navbars/UserNavbar";
 import Sidebar from "components/Sidebar/Sidebar";
+import useAuth from "hooks/useAuth";
 
 const UserLayout = (props) => {
+  const {auth} = useAuth();
   const mainContent = React.useRef(null);
   const location = useLocation();
+
+  const user = auth?.user;
 
   React.useEffect(() => {
     document.documentElement.scrollTop = 0;
@@ -40,7 +28,7 @@ const UserLayout = (props) => {
         }}
       />
       <div className="main-content" ref={mainContent}>
-          <UserNavbar {...props} brandText={'TODO'} />
+          <UserNavbar {...props} brandText={'TODO'} user={user} />
           <Outlet />
       </div>
     </>

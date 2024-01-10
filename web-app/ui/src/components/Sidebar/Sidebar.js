@@ -1,37 +1,13 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.2.3
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-/*eslint-disable*/
 import { useState } from "react";
 import { NavLink as NavLinkRRD, Link } from "react-router-dom";
-// nodejs library to set properties for components
 import { PropTypes } from "prop-types";
 
-// reactstrap components
 import {
   Collapse,
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  Form,
-  Input,
-  InputGroupText,
-  InputGroup,
   Media,
   NavbarBrand,
   Navbar,
@@ -45,27 +21,27 @@ import {
 
 var routes = [
   {
-    path: "/user/dashboard",
+    path: "/dashboard",
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
   },
   {
-    path: "/user/topologies",
+    path: "/topologies",
     name: "Topologies",
     icon: "ni ni-planet text-blue",
   },
   {
-    path: "/user/networks",
+    path: "/networks",
     name: "Networks",
     icon: "ni ni-pin-3 text-orange",
   },
   {
-    path: "/user/virtual-machines",
+    path: "/virtual-machines",
     name: "Virtual Machines",
     icon: "ni ni-bullet-list-67 text-red",
   },
   {
-    path: "/user/profile",
+    path: "/profile",
     name: "User Profile",
     icon: "ni ni-single-02 text-yellow",
   },
@@ -151,7 +127,7 @@ const Sidebar = (props) => {
             <DropdownMenu
               aria-labelledby="navbar-default_dropdown_1"
               className="dropdown-menu-arrow"
-              right
+              end
             >
               <DropdownItem>Action</DropdownItem>
               <DropdownItem>Another action</DropdownItem>
@@ -170,23 +146,23 @@ const Sidebar = (props) => {
                 </span>
               </Media>
             </DropdownToggle>
-            <DropdownMenu className="dropdown-menu-arrow" right>
+            <DropdownMenu className="dropdown-menu-arrow" end>
               <DropdownItem className="noti-title" header tag="div">
                 <h6 className="text-overflow m-0">Welcome!</h6>
               </DropdownItem>
-              <DropdownItem to="/user/profile" tag={Link}>
+              <DropdownItem to="/profile" tag={Link}>
                 <i className="ni ni-single-02" />
                 <span>My profile</span>
               </DropdownItem>
-              <DropdownItem to="/user/profile" tag={Link}>
+              <DropdownItem to="/profile" tag={Link}>
                 <i className="ni ni-settings-gear-65" />
                 <span>Settings</span>
               </DropdownItem>
-              <DropdownItem to="/user/profile" tag={Link}>
+              <DropdownItem to="/profile" tag={Link}>
                 <i className="ni ni-calendar-grid-58" />
                 <span>Activity</span>
               </DropdownItem>
-              <DropdownItem to="/user/profile" tag={Link}>
+              <DropdownItem to="/profile" tag={Link}>
                 <i className="ni ni-support-16" />
                 <span>Support</span>
               </DropdownItem>

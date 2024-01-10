@@ -1,10 +1,8 @@
 import React from 'react';
-import AuthService from 'services/auth';
-import UserService from 'services/user';
+import {UserAPI} from 'services/api';
 
 // Initial state
 const initUser = {
-  info: AuthService.getCurrentUser(),
   new_data: true,
   objects: {
     topologies: {},
@@ -56,7 +54,7 @@ const UserProvider = ({ children }) => {
       return;
     }
 
-    UserService.getUserObjects(user.info.id).then(
+    UserAPI.getUserObjects(user.info.id).then(
       res => {
         userDispatch({type: UserActions.SET_OBJS, payload: res});
         userDispatch({type: UserActions.SET_NEWDATA, payload: false});

@@ -1,31 +1,18 @@
 import React from 'react';
 import {
-  Button,
   Card,
   CardBody,
   CardHeader,
   Col,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
   Row,
   Table,
 } from 'reactstrap';
-import { getMemory, getFlavor, getNetworkType } from 'utils';
 import {Link} from 'react-router-dom';
-import TopologyService from 'services/topology';
-import {UserActions, useUser} from 'contexts/UserContext';
+import {toast} from 'react-toastify';
+import {TopologyAPI} from 'services/api';
+import { getMemory, getFlavor, getNetworkType } from 'utils';
 
 export const TopologyNetworkDetail = ({tname, networks}) => {
-  const [modal, setModal] = React.useState(false);
-
-  const toggle = () => setModal(!modal);
-
   return (
     <Row className="mb-3">
       <div className="col">
@@ -47,9 +34,6 @@ export const TopologyNetworkDetail = ({tname, networks}) => {
                       <Row className="align-items-center">
                         <div className="col">
                           <h3 className="mb-0">{network.name}</h3>
-                        </div>
-                        <div className="col text-right">
-                          <i className="fas fa-pencil" size="md" onClick={toggle} style={{cursor: 'pointer'}}/>
                         </div>
                       </Row>
                     </CardHeader>
@@ -96,11 +80,15 @@ export const TopologyVmDetail = ({tname, vms}) => {
             { vms &&
               vms.map((vm) => (
                 <Col xs={12} sm={6} lg={3} key={tname + "-vm" + vm.ID} >
-                  <Card className="shadow">
-                    <CardHeader className="border-0">
-                      <h3 className="mb-0">{vm.name}</h3>
+                  <Card className="mb-3 border-light rounded">
+                    <CardHeader className="border-0 bg-light">
+                      <Row className="align-items-center">
+                        <div className="col">
+                          <h3 className="mb-0">{vm.name}</h3>
+                        </div>
+                      </Row>
                     </CardHeader>
-                    <Table striped responsive>
+                    <Table responsive>
                       <tbody>
                         <tr>
                           <th>Flavor</th><td>{getFlavor(vm.flavor)}</td>
@@ -131,18 +119,20 @@ export const TopologyVmDetail = ({tname, vms}) => {
   );
 };
 
-export const TopologyDetailRow = ({topologies}) => {
+export const TopologyDetailRow = (props) => {
 
-  const { userDispatch } = useUser();
+  const {topologies, setTopologies} = props;
 
   const deleteTopology = (id) => {
-    TopologyService.delete(id).then(
+    TopologyAPI.delete(id).then(
       res => {
         console.log("Topology deleted successfully : ", res);
-        userDispatch({type: UserActions.SET_NEWDATA, payload: true});
+        setTopologies(topologies.filter((topology) => topology.ID !== id));
+        toast.success('Topology Successfully Deleted');
       },
       err => {
         console.error("Topology delete error : ", err);
+        toast.error('Topology Delete Error');
       }
     );
   }
@@ -168,7 +158,7 @@ export const TopologyDetailRow = ({topologies}) => {
                 onClick={deleteTopology.bind(this, topology.ID)} />
           </td>
           <td>
-            <Link to={"/user/topologies/" + topology.ID} >
+            <Link to={"/topologies/" + topology.ID} >
               <i className="fas fa-eye" style={{cursor: 'pointer', color: 'green'}} />
             </Link>
           </td>
@@ -179,14 +169,17 @@ export const TopologyDetailRow = ({topologies}) => {
   );
 };
 
-export const TopologySummaryRow = ({topologies}) => {
+export const TopologySummaryRow = (props) => {
+
+  const {topologies} = props;
+
   return (
     <tbody>
     {topologies &&
       topologies.map((topology) => (
         <tr key={topology.ID}>
           <th scope="row">
-            <Link to={"/user/topologies/" + topology.ID} state={topology}>
+            <Link to={"/topologies/" + topology.ID} state={topology}>
               {topology.name}
             </Link>
           </th>
