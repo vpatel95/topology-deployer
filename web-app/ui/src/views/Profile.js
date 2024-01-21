@@ -12,10 +12,10 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
-import {useUser} from "contexts/UserContext";
+import {SessionStore} from "services/store";
 
 const Profile = () => {
-  const { user } = useUser();
+  const { user } = SessionStore.getUser();
 
   return (
     <>

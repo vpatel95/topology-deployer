@@ -5,7 +5,6 @@ import { Container, Row, Col } from "reactstrap";
 
 // core components
 import AuthNavbar from "components/Navbars/AuthNavbar.js";
-import AuthFooter from "components/Footers/AuthFooter.js";
 
 const Auth = (props) => {
   const mainContent = React.useRef(null);
@@ -60,7 +59,6 @@ const Auth = (props) => {
           </Row>
         </Container>
       </div>
-      <AuthFooter />
     </>
   );
 };

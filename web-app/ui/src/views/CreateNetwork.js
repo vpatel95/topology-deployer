@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Form, redirect, useLoaderData, useNavigate} from 'react-router-dom';
+import {Form, redirect, useLoaderData, useLocation, useNavigate} from 'react-router-dom';
 import {
   Button,
   Card, Col, Container,
@@ -12,27 +12,26 @@ import {toast} from 'react-toastify';
 
 import {CardHeaderSimple} from "components/Cards";
 import {NetworkAPI, UserAPI} from "services/api";
+import {SessionStore} from "services/store";
 
-// export const createNetworkLoader = async () => {
-//   const response = await UserAPI.topologies(user.id);
-// 
-//   if (response.status >= 200 && response.status < 300) {
-//     return response.data.data;
-//   }
-// 
-//   toast.error('User does not have any topology. Please create topology');
-//   return redirect('/user/networks');
-// };
+const loader = async () => {
+  const user = SessionStore.getUser();
 
-export const createNetworkAction = async ({request}) => {
+  const data = await UserAPI.topologies(user?.id)
+    .then(response => {
+      return response?.data?.data;
+    }, error => {
+      return error;
+    });
+
+  return data;
+};
+
+const action = async ({request}) => {
   const formData = Object.fromEntries(await request.formData());
 
-  console.log(formData);
-
-  formData['has_v6'] = (formData['has_v6'] === "true");
-  formData['topology_id'] = parseInt(formData['topology_id'], 10);
-
-  console.log(formData);
+  formData.has_v6 = (formData.has_v6 === "true");
+  formData.topology_id = parseInt(formData.topology_id, 10);
 
   const response = await NetworkAPI.create(formData);
 
@@ -52,12 +51,14 @@ export const createNetworkAction = async ({request}) => {
   return null;
 };
 
-export const NetworkCreate = () => {
+const NetworkCreate = () => {
   const topologies = useLoaderData();
 
+  const {state} = useLocation();
+
   const initialState = {
-    'name': '', 'type': '', 'subnet4': '', 'subnet6': '',
-    'has_v6': false, 'topology_id': ''
+    name: '', type: '', subnet4: '', subnet6: '',
+    has_v6: false, topology_id: state?.topologyId | ''
   };
   const [formData, setFormData] = useState(initialState);
   const navigate = useNavigate();
@@ -84,7 +85,7 @@ export const NetworkCreate = () => {
                     <Input
                       className="" type="text"
                       placeholder="Enter Network Name"
-                      name="name" value={formData["name"]}
+                      name="name" value={formData.name}
                       onChange={changeHandler}/>
                   </Col>
                 </FormGroup>
@@ -93,7 +94,7 @@ export const NetworkCreate = () => {
                   <Col sm={4}>
                     <Input
                       className="" type="select"
-                      name="type" value={formData["type"]}
+                      name="type" value={formData.type}
                       onChange={changeHandler}>
                       <option value="">--- Select Network Type ---</option>
                       <option value="nat">NAT</option>
@@ -102,7 +103,7 @@ export const NetworkCreate = () => {
                     </Input>
                   </Col>
                 </FormGroup>
-                {formData["type"] !== "isolated" && (
+                {formData.type !== "isolated" && (
                   <>
                     <FormGroup key="subnet4Fg" row>
                       <Label for="subnet4" sm={2}>IPv4 Network Subnet : </Label>
@@ -110,7 +111,7 @@ export const NetworkCreate = () => {
                         <Input
                           type="text"
                           placeholder="Enter IPv4 Network Subnet"
-                          name="subnet4" value={formData["subnet4"]}
+                          name="subnet4" value={formData.subnet4}
                           onChange={changeHandler}/>
                       </Col>
                     </FormGroup>
@@ -119,18 +120,19 @@ export const NetworkCreate = () => {
                       <Col sm={4}>
                         <Input
                           className="ml-1 mt-3" type="checkbox"
-                          name="has_v6" value={formData["has_v6"]}
-                          onChange={changeHandler}/>
+                          name="has_v6" value={formData.has_v6}
+                          onChange={changeHandler}
+                          disabled={formData.type === 'management'} />
                       </Col>
                     </FormGroup>
-                    {formData["has_v6"] && (
+                    {formData.has_v6 && formData.type !== 'management' && (
                     <FormGroup key="subnet6Fg" row>
                       <Label for="subnet6" sm={2}>IPv6 Network Subnet : </Label>
                       <Col sm={4}>
                         <Input
                           type="text"
                           placeholder="Enter IPv6 Network Subnet"
-                          name="subnet6" value={formData["subnet6"]}
+                          name="subnet6" value={formData.subnet6}
                           onChange={changeHandler}/>
                       </Col>
                     </FormGroup>
@@ -142,12 +144,12 @@ export const NetworkCreate = () => {
                   <Col sm={4}>
                     <Input
                       className="" type="select"
-                      name="topology_id" value={formData["topology_id"]}
-                      onChange={changeHandler}>
+                      name="topology_id" value={formData.topology_id}
+                      onChange={changeHandler} disabled={!!(state?.topologyId)}>
                       <option value="0"></option>
                       {topologies &&
-                        topologies.map((topology) => (
-                          <option value={topology.ID}>{topology.name}</option>
+                        topologies.map((topology, index) => (
+                          <option key={index} value={topology.ID}>{topology.name}</option>
                         ))
                       }
                     </Input>
@@ -167,4 +169,10 @@ export const NetworkCreate = () => {
       </Row>
     </Container>
   );
+};
+
+export {
+  NetworkCreate,
+  loader,
+  action,
 };

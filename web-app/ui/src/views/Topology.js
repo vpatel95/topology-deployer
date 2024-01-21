@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Container, Row } from 'reactstrap';
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, useLocation } from 'react-router-dom';
 import {toast} from 'react-toastify';
 
 import { TopologyAPI } from 'services/api';
@@ -21,7 +21,9 @@ export const loader = async ({params}) => {
 
 export const Topology = () => {
   const { data } = useLoaderData();
-  const [topology, setTopology] = useState(data);
+  const [topology] = useState(data);
+
+  const {state} = useLocation();
 
   return (
     <>
@@ -32,8 +34,10 @@ export const Topology = () => {
           </div>
         </Row>
         <Row>
-          <TopologyNetworkDetail tname={topology?.name} networks={topology?.Networks}/>
-          <TopologyVmDetail tname={topology?.name} vms={topology?.VirtualMachines}/>
+          <TopologyNetworkDetail tname={topology?.name}
+            networks={topology?.Networks} edit={!!(state?.edit)} />
+          <TopologyVmDetail tname={topology?.name}
+            vms={topology?.VirtualMachines} edit={state?.edit} />
         </Row>
       </Container>
     </>

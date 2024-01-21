@@ -22,7 +22,7 @@ export const loader = async () => {
 
 export const Dashboard = () => {
   const {data} = useLoaderData();
-  const [objects, setObjects] = useState(data);
+  const [objects] = useState(data);
 
   return (
     <>

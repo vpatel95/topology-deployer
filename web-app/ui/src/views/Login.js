@@ -14,14 +14,11 @@ import {
 } from "reactstrap";
 
 import {useLocation, useNavigate} from 'react-router-dom';
-import useAuth from 'hooks/useAuth';
 import {toast} from 'react-toastify';
 import {AuthAPI} from 'services/api';
 import { SessionStore } from 'services/store';
 
 const Login = () => {
-  // TODO: Remove the useAuth hook
-  const {setAuth} = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -52,8 +49,6 @@ const Login = () => {
     AuthAPI.login(username, password).then(res => {
       const accessToken = res?.data?.token;
       const user = res?.data?.user;
-      // TODO: Remove the useAuth hook
-      setAuth({user, accessToken});
       SessionStore.setToken(accessToken);
       SessionStore.setUser(user);
       navigate(from, { replace: true});

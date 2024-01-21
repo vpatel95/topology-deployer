@@ -42,7 +42,11 @@ import {
   Network,
   loader as networkLoader,
 } from "views/Network";
-import { NetworkCreate, createNetworkAction} from "views/CreateNetwork";
+import {
+  NetworkCreate,
+  loader as createNetworkLoader,
+  action as createNetworkAction,
+} from "views/CreateNetwork";
 import {
   VirtualMachines,
   loader as vmsLoader,
@@ -53,7 +57,6 @@ import {
 } from "views/VirtualMachine";
 import { CreateVirtualMachine } from "views/CreateVirtualMachine";
 
-import {AuthProvider} from "contexts/AuthProvider";
 import { AuthWrapper } from "wrapper/AuthWrapper";
 
 const Root = () => {
@@ -107,6 +110,10 @@ const router = createBrowserRouter(
               loader={topologyLoader}
               errorElement={<Navigate to="/topologies" replace />} />
             <Route
+              path="topologies/:topologyId/edit"
+              element={<Topology />}
+              loader={topologyLoader} />
+            <Route
               path="topologies/create"
               element={<TopologyCreate />}
               action={createTopologyAction} />
@@ -115,25 +122,34 @@ const router = createBrowserRouter(
               element={<Networks />}
               loader={networksLoader} />
             <Route
-              path="networks/create"
-              element={<NetworkCreate />}
-              action={createNetworkAction} />
-            <Route
               path="networks/:networkId"
               element={<Network />}
               loader={networkLoader}
               errorElement={<Navigate to="/networks" replace />} />
             <Route
+              path="networks/:networkId/edit"
+              element={<Network />}
+              loader={networkLoader} />
+            <Route
+              path="networks/create"
+              element={<NetworkCreate />}
+              loader={createNetworkLoader}
+              action={createNetworkAction} />
+            <Route
               path="virtual-machines"
               element={<VirtualMachines />}
               loader={vmsLoader} />
             <Route
-              path="virtual-machines/create"
-              element={<CreateVirtualMachine />} />
-            <Route
               path="virtual-machines/:vmId"
               element={<VirtualMachine />}
               loader={vmLoader} />
+            <Route
+              path="virtual-machines/:vmId/edit"
+              element={<VirtualMachine />}
+              loader={vmLoader} />
+            <Route
+              path="virtual-machines/create"
+              element={<CreateVirtualMachine />} />
             <Route
               path="*"
               element={<Navigate to="/dashboard" replace />} />
@@ -147,7 +163,5 @@ const router = createBrowserRouter(
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <AuthProvider>
-    <RouterProvider router={router} />
-  </AuthProvider>
+  <RouterProvider router={router} />
 )

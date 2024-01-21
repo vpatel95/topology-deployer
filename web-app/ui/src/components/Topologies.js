@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Button,
   Card,
   CardBody,
   CardHeader,
@@ -7,12 +8,21 @@ import {
   Row,
   Table,
 } from 'reactstrap';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {TopologyAPI} from 'services/api';
 import { getMemory, getFlavor, getNetworkType } from 'utils';
 
-export const TopologyNetworkDetail = ({tname, networks}) => {
+export const TopologyNetworkDetail = (props) => {
+
+  const topologyId = useParams();
+  const navigate = useNavigate();
+
+  const addNetwork = () => {
+    navigate("/networks/create", {state: topologyId});
+  };
+
+  const {tname, networks, edit} = props;
   return (
     <Row className="mb-3">
       <div className="col">
@@ -20,8 +30,13 @@ export const TopologyNetworkDetail = ({tname, networks}) => {
           <CardHeader className="border-0">
             <Row className="align-items-center">
               <div className="col">
-                <h3>{ tname } Networks</h3>
+                <h3 className="mb-0">{ tname } Networks</h3>
               </div>
+              {edit && (
+                <Button onClick={addNetwork} color={"default"} className="mr-3">
+                  Add Network
+                </Button>
+              )}
             </Row>
           </CardHeader>
           <CardBody>
@@ -151,7 +166,9 @@ export const TopologyDetailRow = (props) => {
           <td>{topology.Networks.length}</td>
           <td>{topology.VirtualMachines.length}</td>
           <td>
-            <i className="fas fa-pencil" style={{cursor: 'pointer'}} />
+            <Link to={"/topologies/" + topology.ID + "/edit"} state={{edit: true}}>
+              <i className="fas fa-pencil" style={{cursor: 'pointer'}} />
+            </Link>
           </td>
           <td>
             <i className="fas fa-trash" style={{cursor: 'pointer', color: 'red'}}

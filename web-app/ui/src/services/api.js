@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { redirect } from 'react-router-dom';
-import {toast} from 'react-toastify';
 import {SessionStore} from './store';
 
 const BASE_URL = 'http://10.87.1.25:5000/api';

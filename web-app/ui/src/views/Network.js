@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {useLoaderData} from "react-router-dom";
-import {Card, CardBody, CardHeader, Container, Row, Spinner} from "reactstrap";
+import {Card, CardBody, CardHeader, Container, Row} from "reactstrap";
 
 import {NetworkDetail} from "components/Networks";
 import {NetworkAPI} from "services/api";
@@ -27,8 +27,8 @@ const loader = async ({params}) => {
 
 const Network = () => {
   const { nw, vms } = useLoaderData();
-  const [network, setNetwork] = useState(nw);
-  const [attachedVms, setAttachedVms] = useState(vms);
+  const [network] = useState(nw);
+  const [attachedVms] = useState(vms);
 
   return (
     <>

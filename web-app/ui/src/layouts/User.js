@@ -3,14 +3,12 @@ import { useLocation, Outlet } from "react-router-dom";
 
 import UserNavbar from "components/Navbars/UserNavbar";
 import Sidebar from "components/Sidebar/Sidebar";
-import useAuth from "hooks/useAuth";
+import {SessionStore} from "services/store";
 
 const UserLayout = (props) => {
-  const {auth} = useAuth();
+  const user = SessionStore.getUser();
   const mainContent = React.useRef(null);
   const location = useLocation();
-
-  const user = auth?.user;
 
   React.useEffect(() => {
     document.documentElement.scrollTop = 0;
@@ -22,7 +20,7 @@ const UserLayout = (props) => {
     <>
       <Sidebar {...props}
         logo={{
-          innerLink: "/user/dashboard",
+          innerLink: "/dashboard",
           imgAlt: "...",
           imgSrc: require("assets/img/brand/argon-react.png"),
         }}

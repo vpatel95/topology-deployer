@@ -6,7 +6,7 @@ import {
   Container,
   Row
 } from 'reactstrap';
-import {useNavigate, useLoaderData} from "react-router-dom";
+import {useLoaderData} from "react-router-dom";
 
 import {VmDetail} from "components/VirtualMachines";
 import {VmAPI} from "services/api";
@@ -24,8 +24,7 @@ const loader = async ({params}) => {
 
 const VirtualMachine = () => {
   const {data} = useLoaderData();
-  const [vm, setVm] = useState(data);
-  const navigate = useNavigate();
+  const [vm] = useState(data);
 
   return (
     <>
